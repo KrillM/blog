@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Printed Item Data Example 1</h1>
+<div>
+  제목 : <span th:text="${readDto.title}"></span>
+</div>
+<div>
+  부제목 : <span th:text="${readDto.subTitle}"></span>
+</div>
+<div>
+  지역 : <span th:text="${readDto.local}"></span>
+</div>
+<div>
+  종류 : <span th:text="${readDto.type}"></span>
+</div>
+<div>
+  내용 : <span th:text="${readDto.content}"></span>
+</div>
+
+</body>
+</html>

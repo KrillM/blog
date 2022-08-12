@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        .carousel-inner > .item {
+            height : 350px;
+        }
+        .margin{
+            margin-bottom : 30px;
+        }
+        .banner{
+            height : 300px;
+            position: absolute; top:0; left:0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-text{
+            text-overflow : ellipsis;
+            white-space : nowrap;
+            overflow : hidden;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+        .center{
+            text-align:center;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <form class="form-inline justify-content-center" th:action="@{/}" method="get">
+        <input name="searchQuery" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left:10px">검색</button>
+    </form>
+    <br/>
+    <input type="hidden" name="searchQuery" th:value="${readSearchDto.searchQuery}">
+    <div th:if="${not #strings.isEmpty(readSearchDto.searchQuery)}" class="center">
+        <p class="h3 font-weight-bold" th:text="${readSearchDto.searchQuery} + ' 검색결과'"></p>
+    </div>
+
+    <div class="row">
+        <th:block th:each="read, status: ${reads.getContent()}">
+            <div class="col-md-4-margin">
+                <div class="card">
+                    <a th:href="'/read/' + ${read.id}" class="text-dark">
+                        <img th:src=" 'images/picture/' + ${read.imgUrl}" class="card-img-top" th:alt="${read.title}" height="400">
+                        <div class="card-body">
+                            <h4 class="card-title">[[${read.title}]]</h4>
+                            <p class="card-text">
+                                <span>[[${read.local}]]</span>
+                                <span>[[${read.type}]]</span>
+                            </p>
+                            <h5 class="card-title">[[${read.subtitle}]]</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:with="start=${(reads.number/maxPage)*maxPage +1},
+        end=(${(reads.totalPages == 0) ? 1 : (start + (maxPage-1) < reads.totalPages ?
+        start + (maxPage - 1) : reads.totalPages)})">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${reads.number eq 0}?'disabled'">
+                <a th:href="@{'/' + '?searchQuery=' + ${readSearchDto.searchQuery} + '&page=' + ${reads.number-1}}"
+                   aria-label='Previous' class="page-link">
+                    <span aria-hidden="true"> < </span>
+                </a>
+            </li>
+            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"
+                th:classappend="${reads.number eq page-1}?'active':''">
+                <a th:href="@{'/' + '?searchQuery=' + ${readSearchDto.searchQuery} + '&page=' +${page -1}}"
+                   th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+            <li class="page-item" th:classappend="${reads.number+1 ge reads.totalPages}?'disabled'">
+                <a th:href="@{'/' + '?searchQuery=' + ${readSearchDto.searchQuery} + '&page=' + ${reads.number + 1}}"
+                   aria-label="Next" class="page-link">
+                    <span aria-hidden="true"> > </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>

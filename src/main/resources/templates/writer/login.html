@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .error{
+      color: #bd2130;
+     }
+  </style>
+</th:block>
+<div layout:fragment="content">
+  <form action="/writer/login" role="form" method="post" >
+    <div class="form-group">
+      <label th:for="email">이메일</label>
+      <input type="email" name="email" class="form-control" placeholder="이메일을 입력해주세요.">
+    </div>
+    <div class="form-group">
+      <label th:for="password">비밀번호</label>
+      <input type="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요">
+    </div>
+    <p th:if="${loginErrorMessage}" class="error" th:text="${loginErrorMessage}"></p>
+    <div style="text-align:end">
+      <button class="btn btn-primary">로그인</button>
+      <button type="button" class="btn btn-primary" onclick="location.href='/writer/sign'">회원가입</button>
+    </div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+  </form>
+</div>
+</html>
